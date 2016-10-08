@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<statechart state_in="svInitAll">
+
+    <state name="svInitAll">
+        <action>svInitAll</action>
+        <vars>
+            <var name="return">default</var>
+        </vars>
+        <state_out name="ok">svWaitCardAndRead</state_out>
+        <state_out name="error">svEndAll</state_out>
+    </state>
+
+    <state name="svWaitCardAndRead">
+        <action>svWaitCardAndRead</action>
+        <vars>
+            <var name="account">account123</var>
+            <var name="return">default</var>
+        </vars>
+        <state_out name="ok">svPoolPinPad</state_out>
+        <state_out name="error">svEndAll</state_out>
+    </state>
+
+    <state name="svPoolPinPad">
+        <action>svPoolPinPad</action>
+        <vars>
+            <var name="password">password123</var>
+            <var name="return">default</var>
+        </vars>
+        <state_out name="ok">svBuzMenu</state_out>
+        <state_out name="error">svEndAll</state_out>
+    </state>
+
+    <state name="svBuzMenu">
+        <action>svBuzMenu</action>
+        <vars>
+            <var name="choice">item1</var>
+            <var name="return">default</var>
+        </vars>
+        <state_out name="item1">svWithdralInit</state_out>
+        <state_out name="done">svEjectAndCapCard</state_out>
+        <state_out name="error">svEndAll</state_out>
+    </state>
+
+    <state name="svWithdralInit">
+        <action>svWithdralInit</action>
+        <vars>
+            <var name="return">default</var>
+        </vars>
+        <state_out name="ok">svWithdralAmtCheck</state_out>
+        <state_out name="error">svEndAll</state_out>
+    </state>
+
+    <state name="svWithdralAmtCheck">
+        <action>svWithdralAmtCheck</action>
+        <vars>
+            <var name="amount">amount123</var>
+            <var name="return">default</var>
+        </vars>
+        <state_out name="ok">svMixDispense</state_out>
+        <state_out name="error">svEndAll</state_out>
+    </state>
+
+    <state name="svMixDispense">
+        <action>svMixDispense</action>
+        <vars>
+            <var name="amount">@svWithdralAmtCheck.return</var>
+            <var name="return">default</var>
+        </vars>
+        <state_out name="ok">svTrsSdAndRev</state_out>
+        <state_out name="error">svEndAll</state_out>
+    </state>
+
+    <state name="svTrsSdAndRev">
+        <action>svTrsSdAndRev</action>
+        <vars>
+            <var name="xmlData">xmlData</var>
+            <var name="flag">flag</var>
+            <var name="transType">transType</var>
+            <var name="return">default</var>
+        </vars>
+        <state_out name="ok">svBuzMenu</state_out>
+        <state_out name="done">svEjectAndCapCard</state_out>
+        <state_out name="error">svEndAll</state_out>
+    </state>
+
+    <state name="svEjectAndCapCard">
+        <action>svEjectAndCapCard</action>
+        <vars>
+            <var name="account">@svWaitCardAndRead.account</var>
+            <var name="return">default</var>
+        </vars>
+        <state_out name="ok">svEndAll</state_out>
+        <state_out name="error">svEndAll</state_out>
+    </state>
+
+    <state name="svEndAll">
+        <action>svEndAll</action>
+        <vars>
+            <var name="return">default</var>
+        </vars>
+        <state_out name="ok">return</state_out>
+    </state>
+
+</statechart>

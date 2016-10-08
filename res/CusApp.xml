@@ -1,0 +1,1030 @@
+<?xml version="1.0"?>
+<statechart defaultstate="客户主框架流程">
+    <inparamchart>
+    </inparamchart>
+    <outparamchart>
+    </outparamchart>
+    <tempdatachart>
+    </tempdatachart>
+
+    <state id="客户主框架流程" property="logic" classname="客户主框架流程" majortype="2" subflow="客户主框架流程">
+        <transition result="Ok" targetstate="END" assit="Ok"/>
+        <inparamchart>
+        </inparamchart>
+        <outparamchart>
+        </outparamchart>
+    </state>
+    <state id="客户主框架流程" defaultstate="启动数据记录1" property="sub">
+        <inparamchart>
+        </inparamchart>
+        <outparamchart>
+        </outparamchart>
+        <tempdatachart>
+            <tempdata id="udf_TrsAccount" comment="交易账号"/>
+            <tempdata id="udf_track2" comment="二磁道数据"/>
+            <tempdata id="udf_track3" comment="三磁道数据"/>
+            <tempdata id="udf_cardtype" comment="读取到的卡(磁条IC降级等)"/>
+            <tempdata id="udf_LocalRetCode" comment="本地错误码"/>
+            <tempdata id="udf_TrsAccountType" comment="选择的账户类型"/>
+            <tempdata id="udf_AccountType" comment="获取的卡种类型"/>
+            <tempdata id="udf_AccountTypeName" comment="获取的卡类型名"/>
+            <tempdata id="udf_transgnlb" comment="获取的功能列表"/>
+            <tempdata id="udf_TransLanguage" comment="选择的交易语言"/>
+            <tempdata id="udf_CheckAmount" comment="验钞金额"/>
+            <tempdata id="udf_actiontype" comment="设备状态"/>
+            <tempdata id="udf_actionnote" comment="设备子状态"/>
+            <tempdata id="udf_subcashstatus" comment="存取款状态"/>
+            <tempdata id="udf_PageName" comment="页面名称"/>
+            <tempdata id="udf_SendAppStatusType" comment="运行状态通知类型"/>
+            <tempdata id="udf_statechangeflag" comment="设备状态变化标志"/>
+            <tempdata id="udf_RollbackFlag" comment="冲正标志"/>
+            <tempdata id="udf_RollbackData" comment="冲正数据"/>
+            <tempdata id="udf_NeedSignInFlag" comment="需要签到标志"/>
+            <tempdata id="udf_SignJPRLog" comment="签到流水打印标志"/>
+            <tempdata id="udf_pinblock" comment="加密密码"/>
+            <tempdata id="udf_AIDData" comment="选择的应用"/>
+            <tempdata id="udf_AIPData" comment="应用交互特征"/>
+            <tempdata id="udf_SupportECashFlag" comment="支持电子现金标志"/>
+            <tempdata id="udf_EcashAccountType" comment="电子现金卡类型"/>
+            <tempdata id="udf_ReadSyncFlag" comment="并行读卡标志"/>
+            <tempdata id="udf_SMSignJPRLog" comment="国密签到流水打印标志"/>
+            <tempdata id="udf_name" comment="身份证姓名"/>
+            <tempdata id="udf_sex" comment="身份证性别"/>
+            <tempdata id="udf_nationality" comment="身份证民族"/>
+            <tempdata id="udf_address" comment="身份证住址"/>
+            <tempdata id="udf_birthday" comment="身份证生日"/>
+            <tempdata id="udf_idnumber" comment="身份证号码"/>
+            <tempdata id="udf_endorsemachinery" comment="身份证签证机关"/>
+            <tempdata id="udf_validitystartingdate" comment="身份证有效开始日期"/>
+            <tempdata id="udf_validityenddat" comment="身份证有效结束日期"/>
+            <tempdata id="udf_frontimage" comment="身份证正面图像"/>
+            <tempdata id="udf_backimage" comment="身份证反面图像"/>
+            <tempdata id="udf_portraitfilename" comment="身份证头像"/>
+            <tempdata id="udf_ChipAPPType" comment="芯片应用类型"/>
+        </tempdatachart>
+        <state id="系统初始化1" action="SysInit" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="通知其他状态机启动1"/>
+        </state>
+        <state id="退卡" action="EndServiceEject" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="设置默认交易语言1"/>
+        </state>
+        <state id="App交易选择1" action="AppTransSelect" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="TimeOut" targetstate="操作超时流水打印1"/>
+            <transition result="DeviceError" targetstate="显示设备故障页面1"/>
+            <transition result="EndService" targetstate="退卡"/>
+            <transition result="AppCall" targetstate="App调度1"/>
+        </state>
+        <state id="启动流水打印1" action="OpenJPRService" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="获取IP与发送设备信息1"/>
+        </state>
+        <state id="获取IP与发送设备信息1" action="GetIPAndSendDeviceInfo" timeout="0" loadpage="" property=""
+               TimeOutState="操作超时">
+            <transition result="Ok" targetstate="系统初始化1"/>
+        </state>
+        <state id="设置密钥失败暂停服务1" action="SetPIKErrOut" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="主密钥错误暂停服务"/>
+        </state>
+        <state id="显示暂停服务页面1" action="ShowOutOfService" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="设置密钥失败暂停服务2"/>
+        </state>
+        <state id="显示主密钥错误页面1" action="ShowMasterKeyError" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="设置密钥失败暂停服务1"/>
+        </state>
+        <state id="设置密钥失败暂停服务2" action="SetPIKErrOut" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="密钥加载失败暂停服务"/>
+        </state>
+        <state id="初始化数据1" action="InitData" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="系统冲正交易处理过程1"/>
+        </state>
+        <state id="等待管理员结束通知1" action="WaitStopOPNotice" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="设置设备正常运行状态1"/>
+        </state>
+        <state id="设置设备正常运行状态1" action="SetDeviceRunStatusO" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="签到交易子流程"/>
+        </state>
+        <state id="凭条打印机自检1" action="RPRSelfCheck" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="输入密码前处理子流程1"/>
+            <transition result="Error" targetstate="显示凭条无法提供页面1"/>
+        </state>
+        <state id="显示凭条无法提供页面1" action="ShowNoRPRPage" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Enter" targetstate="输入密码前处理子流程1"/>
+            <transition result="Cancel" targetstate="退卡"/>
+            <transition result="TimeOut" targetstate="退卡"/>
+            <transition result="DeviceError" targetstate="退卡"/>
+        </state>
+        <state id="设备自检暂停服务处理1" action="DevCheckOutSevicePro" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="设备错误暂停服务"/>
+        </state>
+        <state id="显示设备故障页面1" action="ShowDeviceFault" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="退卡"/>
+        </state>
+        <state id="操作超时流水打印1" action="OpTimeOutJPR" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="退卡"/>
+        </state>
+        <state id="日志打印机自检1" action="JPRSelfCheck" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="继续与结束检查处理1"/>
+            <transition result="Error" targetstate="显示取消服务页面1"/>
+        </state>
+        <state id="继续交易卡片与存折检查2" action="ContinueCheckCardAndPass" timeout="0" loadpage="" property=""
+               TimeOutState="操作超时">
+            <transition result="Ok" targetstate="继续交易数据记录1"/>
+            <transition result="End" targetstate="退卡"/>
+        </state>
+        <state id="显示取消服务页面1" action="ShowCancelServicePage" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="退卡"/>
+        </state>
+        <state id="继续与结束检查处理1" action="CheckSomeFlag" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="继续交易卡片与存折检查2"/>
+            <transition result="Sign" targetstate="退卡"/>
+        </state>
+        <state id="继续与结束检查处理2" action="CheckSomeFlag" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="设备自检处理1"/>
+            <transition result="Sign" targetstate="签到交易子流程"/>
+        </state>
+        <state id="显示账户选择页面1" action="ShowSelectAccType" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="App数据传入设置1"/>
+            <transition result="Enter" targetstate="App数据传入设置1"/>
+            <transition result="Cancel" targetstate="退卡"/>
+            <transition result="TimeOut" targetstate="操作超时流水打印1"/>
+            <transition result="DeviceError" targetstate="显示设备故障页面1"/>
+        </state>
+        <state id="输入密码判断1" action="JudgeInputPIN" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Yes" targetstate="输入密码及校验子流程1"/>
+            <transition result="No" targetstate="判断是否为全委托模式1"/>
+        </state>
+        <state id="逻辑关状态判断处理1" action="JudgeLogicClosePro" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="App初始化1"/>
+            <transition result="OutService" targetstate="逻辑关暂停服务处理"/>
+        </state>
+        <state id="加钞状态判断处理1" action="JudgeAddCashPro" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="OutService" targetstate="未加钞暂停服务"/>
+            <transition result="Ok" targetstate="初始化数据1"/>
+        </state>
+        <state id="设置默认交易语言1" action="SetDefaultLanguage" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="继续与结束检查处理2"/>
+        </state>
+        <state id="设备自检处理1" action="SelfCheckProcess" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="设备自检后处理1"/>
+            <transition result="DeviceError" targetstate="设备自检暂停服务处理1"/>
+        </state>
+        <state id="设备自检后处理1" action="AfterDeviceCheckPro" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="等待插卡折前数据初始化1"/>
+        </state>
+        <state id="等待插卡或折处理1" action="WaitInsertOrPress" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="交易中状态通知2"/>
+            <transition result="Card" targetstate="交易中状态通知2"/>
+            <transition result="Pass" targetstate="交易中状态通知2"/>
+            <transition result="KeyEnd" targetstate="凭条打印机自检2"/>
+            <transition result="WaitStopOP" targetstate="通知进入管理员1"/>
+            <transition result="SelfCheck" targetstate="显示系统正在处理页面1"/>
+            <transition result="LogicOpen" targetstate="等待插卡折前数据初始化1"/>
+            <transition result="Sign" targetstate="设置设备正常运行状态1"/>
+            <transition result="OutService" targetstate="设备自检暂停服务处理1"/>
+            <transition result="NeedCard" targetstate="等待插卡处理1"/>
+            <transition result="NeedPass" targetstate="等待插折处理1"/>
+            <transition result="End" targetstate="等待插卡折前数据初始化1"/>
+            <transition result="IC" targetstate="交易中状态通知3"/>
+            <transition result="IDCValid" targetstate="全委托模式App调度1"/>
+            <transition result="PageEnterOP" targetstate="管理员登陆子流程1"/>
+        </state>
+        <state id="等待插卡折前数据初始化1" action="WaitBeforeInitTrsData" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="IE内存判断1"/>
+        </state>
+        <state id="显示系统正在处理页面1" action="ShowSystemDealing" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="设备自检处理1"/>
+        </state>
+        <state id="凭条打印机自检2" action="RPRSelfCheck" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="交易中状态通知1"/>
+            <transition result="Error" targetstate="显示凭条无法提供页面2"/>
+        </state>
+        <state id="显示凭条无法提供页面2" action="ShowNoRPRPage" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Enter" targetstate="交易中状态通知1"/>
+            <transition result="Cancel" targetstate="等待插卡折前数据初始化1"/>
+            <transition result="TimeOut" targetstate="等待插卡折前数据初始化1"/>
+            <transition result="DeviceError" targetstate="显示系统正在处理页面1"/>
+        </state>
+        <state id="App初始化1" action="InitWSAPApp" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="VTA视频登录1"/>
+        </state>
+        <state id="App调度1" action="CallApp" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="EndService" targetstate="App数据传出获取1"/>
+            <transition result="TimeOut" targetstate="操作超时流水打印2"/>
+            <transition result="DeviceError" targetstate="显示设备故障页面2"/>
+            <transition result="ContinueService" targetstate="App数据传出获取2"/>
+            <transition result="AppCall" targetstate="App调度1"/>
+        </state>
+        <state id="获取账号信息1" action="GetAccountInfo" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="插卡数据记录1"/>
+            <transition result="Error" targetstate="退卡"/>
+        </state>
+        <state id="App数据传入设置1" action="SetSendToAppData" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="App交易选择1"/>
+        </state>
+        <state id="App数据传出获取1" action="GetFromAppData" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="退卡"/>
+        </state>
+        <state id="显示设备故障页面2" action="ShowDeviceFault" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="App数据传出获取1"/>
+        </state>
+        <state id="操作超时流水打印2" action="OpTimeOutJPR" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="App数据传出获取1"/>
+        </state>
+        <state id="App数据传出获取2" action="GetFromAppData" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="日志打印机自检1"/>
+        </state>
+        <state id="签到设置超时时间1" action="SignSetTimeOut" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="TimeOut" targetstate="签到交易子流程"/>
+            <transition result="LogicClose" targetstate="签到交易子流程"/>
+            <transition result="StartOP" targetstate="等待管理员结束通知1"/>
+        </state>
+        <state id="管理员登陆子流程1" property="logic" subflow="管理员登陆子流程">
+            <transition result="EndService" targetstate="等待插卡折前数据初始化1"/>
+            <transition result="Ok" targetstate="等待管理员结束通知1"/>
+            <inparamchart>
+            </inparamchart>
+            <outparamchart>
+            </outparamchart>
+        </state>
+        <state id="输入密码前处理子流程1" property="logic" subflow="输入密码前处理子流程">
+            <transition result="DeviceError" targetstate="显示设备故障页面1"/>
+            <transition result="OperateTimeOut" targetstate="操作超时流水打印1"/>
+            <transition result="EndService" targetstate="退卡"/>
+            <transition result="ContinueService" targetstate="并行读卡标志判断1"/>
+            <inparamchart>
+            </inparamchart>
+            <outparamchart>
+                <outparam id="$udf_TransLanguage"/>
+            </outparamchart>
+        </state>
+        <state id="设置签到流水打印标志初值1" action="SetSignJPRInitValue" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="签到交易子流程"/>
+        </state>
+        <state id="IE初始化1" action="IEInit" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="CreatIeFailed" targetstate="服务登录1"/>
+            <transition result="Ok" targetstate="显示系统正在初始化页面1"/>
+        </state>
+        <state id="服务登录1" action="ServiceLogin" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="启动流水打印1"/>
+            <transition result="Error" targetstate="启动流水打印1"/>
+        </state>
+        <state id="等待插卡处理1" action="WaitInsertCard" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="等待插卡折前数据初始化1"/>
+            <transition result="Card" targetstate="交易中状态通知2"/>
+            <transition result="Pass" targetstate="交易中状态通知2"/>
+            <transition result="KeyEnd" targetstate="等待插卡折前数据初始化1"/>
+            <transition result="SelfCheck" targetstate="显示系统正在处理页面1"/>
+            <transition result="LogicOpen" targetstate="等待插卡折前数据初始化1"/>
+            <transition result="IC" targetstate="交易中状态通知3"/>
+        </state>
+        <state id="等待插折处理1" action="WaitInsertPass" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="等待插卡折前数据初始化1"/>
+            <transition result="Card" targetstate="交易中状态通知2"/>
+            <transition result="Pass" targetstate="交易中状态通知2"/>
+            <transition result="KeyEnd" targetstate="等待插卡折前数据初始化1"/>
+            <transition result="SelfCheck" targetstate="显示系统正在处理页面1"/>
+            <transition result="LogicOpen" targetstate="等待插卡折前数据初始化1"/>
+        </state>
+        <state id="客户周期开始打印1" action="CustomBeginJPR" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="获取账号信息1"/>
+        </state>
+        <state id="客户周期开始打印2" action="CustomBeginJPR" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="IC卡预处理1"/>
+        </state>
+        <state id="IC卡预处理1" action="ICPreProcess" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="IC卡读取余额1"/>
+            <transition result="End" targetstate="退卡"/>
+            <transition result="Reduce" targetstate="获取账号信息1"/>
+        </state>
+        <state id="IC卡读取数据1" action="ICCardReadData" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="获取账号信息1"/>
+            <transition result="End" targetstate="退卡"/>
+            <transition result="CheckErr" targetstate="获取账号信息1"/>
+            <transition result="Reduce" targetstate="获取账号信息1"/>
+        </state>
+        <state id="IC卡读取余额1" action="ICReadBalance" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="并行读卡判断1"/>
+        </state>
+        <state id="逻辑关暂停服务处理" property="logic" subflow="暂停服务处理子流程">
+            <transition result="Check" targetstate="逻辑关状态判断处理1"/>
+            <transition result="LogicOpen" targetstate="逻辑关状态判断处理1"/>
+            <transition result="DeviceOk" targetstate="逻辑关暂停服务处理"/>
+            <transition result="WaitStopOP" targetstate="等待管理员结束通知3"/>
+            <inparamchart>
+            </inparamchart>
+            <outparamchart>
+            </outparamchart>
+        </state>
+        <state id="暂停服务处理子流程1" property="logic" subflow="暂停服务处理子流程">
+            <transition result="Check" targetstate="暂停服务处理子流程1"/>
+            <transition result="LogicOpen" targetstate="暂停服务处理子流程1"/>
+            <transition result="DeviceOk" targetstate="暂停服务处理子流程1"/>
+            <transition result="WaitStopOP" targetstate="等待管理员结束通知2"/>
+            <inparamchart>
+            </inparamchart>
+            <outparamchart>
+            </outparamchart>
+        </state>
+        <state id="未加钞暂停服务" property="logic" subflow="暂停服务处理子流程">
+            <transition result="Check" targetstate="未加钞暂停服务"/>
+            <transition result="LogicOpen" targetstate="未加钞暂停服务"/>
+            <transition result="DeviceOk" targetstate="未加钞暂停服务"/>
+            <transition result="WaitStopOP" targetstate="等待管理员结束通知1"/>
+            <inparamchart>
+            </inparamchart>
+            <outparamchart>
+            </outparamchart>
+        </state>
+        <state id="密钥加载失败暂停服务" property="logic" subflow="暂停服务处理子流程">
+            <transition result="Check" targetstate="密钥加载失败暂停服务"/>
+            <transition result="LogicOpen" targetstate="密钥加载失败暂停服务"/>
+            <transition result="DeviceOk" targetstate="密钥加载失败暂停服务"/>
+            <transition result="WaitStopOP" targetstate="等待管理员结束通知1"/>
+            <inparamchart>
+            </inparamchart>
+            <outparamchart>
+            </outparamchart>
+        </state>
+        <state id="主密钥错误暂停服务" property="logic" subflow="暂停服务处理子流程">
+            <transition result="Check" targetstate="签到交易子流程"/>
+            <transition result="LogicOpen" targetstate="签到交易子流程"/>
+            <transition result="DeviceOk" targetstate="签到交易子流程"/>
+            <transition result="WaitStopOP" targetstate="等待管理员结束通知1"/>
+            <inparamchart>
+            </inparamchart>
+            <outparamchart>
+            </outparamchart>
+        </state>
+        <state id="设备错误暂停服务" property="logic" subflow="暂停服务处理子流程">
+            <transition result="Check" targetstate="设备自检处理1"/>
+            <transition result="LogicOpen" targetstate="签到交易子流程"/>
+            <transition result="DeviceOk" targetstate="设备自检处理1"/>
+            <transition result="WaitStopOP" targetstate="等待管理员结束通知1"/>
+            <inparamchart>
+            </inparamchart>
+            <outparamchart>
+            </outparamchart>
+        </state>
+        <state id="通知其他状态机启动1" property="logic" subflow="通知其他状态机启动">
+            <transition result="Ok" targetstate="判断设备是否注册1"/>
+            <inparamchart>
+            </inparamchart>
+            <outparamchart>
+            </outparamchart>
+        </state>
+        <state id="等待放卡处理1" action="WaitPutCard" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="IC" targetstate="交易中状态通知3"/>
+            <transition result="End" targetstate="等待插卡折前数据初始化1"/>
+            <transition result="NotOpen" targetstate="等待插卡折前数据初始化1"/>
+        </state>
+        <state id="App已选择判断1" action="AppJudgeAlreadySelect" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="凭条打印机自检1"/>
+            <transition result="NotSupport" targetstate="显示卡不支持交易页面1"/>
+        </state>
+        <state id="显示卡不支持交易页面1" action="ShowCardNotSupport" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="退卡"/>
+        </state>
+        <state id="并行读卡判断1" action="JudgeReadCardSync" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="凭条打印机自检1"/>
+            <transition result="No" targetstate="IC卡读取数据1"/>
+        </state>
+        <state id="并行读卡标志判断1" action="JudgeSyncReadFlag" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="并行读卡结果判断1"/>
+            <transition result="No" targetstate="输入密码判断1"/>
+        </state>
+        <state id="并行读卡结果判断1" action="JudgeSyncReadResult" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="获取账号信息2"/>
+            <transition result="Error" targetstate="退卡"/>
+            <transition result="CheckErr" targetstate="获取账号信息2"/>
+            <transition result="Wait" targetstate="显示系统正在处理页面2"/>
+            <transition result="Reduce" targetstate="获取账号信息2"/>
+        </state>
+        <state id="获取账号信息2" action="GetAccountInfo" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="插卡数据记录2"/>
+            <transition result="Error" targetstate="退卡"/>
+        </state>
+        <state id="App已选择判断2" action="AppJudgeAlreadySelect" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="输入密码判断1"/>
+            <transition result="NotSupport" targetstate="显示卡不支持交易页面2"/>
+        </state>
+        <state id="显示卡不支持交易页面2" action="ShowCardNotSupport" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="退卡"/>
+        </state>
+        <state id="显示系统正在处理页面2" action="ShowSystemDealing" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="并行读卡设置等待超时1"/>
+        </state>
+        <state id="并行读卡设置等待超时1" action="ReadSyncSetWaitTime" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="并行读卡结果判断1"/>
+        </state>
+        <state id="启动数据记录1" action="StartDataRecord" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="IE初始化1"/>
+        </state>
+        <state id="插卡数据记录1" action="InsertDataRecord" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="App已选择判断1"/>
+        </state>
+        <state id="插卡数据记录2" action="InsertDataRecord" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="App已选择判断2"/>
+        </state>
+        <state id="继续交易数据记录1" action="ContinueTrsRecord" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="App交易选择1"/>
+        </state>
+        <state id="VTA视频登录1" action="VTALogIn" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="SendError" targetstate="设置签到流水打印标志初值1"/>
+            <transition result="MessageError" targetstate="设置签到流水打印标志初值1"/>
+            <transition result="TimeOut" targetstate="设置签到流水打印标志初值1"/>
+            <transition result="RecvError" targetstate="设置签到流水打印标志初值1"/>
+            <transition result="Ok" targetstate="设置签到流水打印标志初值1"/>
+            <transition result="Error" targetstate="设置签到流水打印标志初值1"/>
+        </state>
+        <state id="判断设备是否注册1" action="JudgeMachineRegister" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Yes" targetstate="判断主密钥是否加载1"/>
+            <transition result="No" targetstate="暂停服务处理子流程1"/>
+        </state>
+        <state id="等待管理员结束通知2" action="WaitStopOPNotice" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="判断设备是否注册1"/>
+        </state>
+        <state id="等待管理员结束通知3" action="WaitStopOPNotice" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="逻辑关状态判断处理1"/>
+        </state>
+        <state id="判断主密钥是否加载1" action="JudgeMasterKeyLoad" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Yes" targetstate="逻辑关状态判断处理1"/>
+            <transition result="No" targetstate="暂停服务处理子流程13"/>
+        </state>
+        <state id="暂停服务处理子流程13" property="logic" subflow="暂停服务处理子流程">
+            <transition result="Check" targetstate="暂停服务处理子流程13"/>
+            <transition result="LogicOpen" targetstate="暂停服务处理子流程13"/>
+            <transition result="DeviceOk" targetstate="暂停服务处理子流程13"/>
+            <transition result="WaitStopOP" targetstate="等待管理员结束通知4"/>
+            <inparamchart>
+            </inparamchart>
+            <outparamchart>
+            </outparamchart>
+        </state>
+        <state id="等待管理员结束通知4" action="WaitStopOPNotice" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="判断主密钥是否加载1"/>
+        </state>
+        <state id="通知进入管理员1" action="PostToStartOP" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="等待管理员结束通知1"/>
+        </state>
+        <state id="系统冲正交易处理过程1" property="logic" subflow="系统冲正交易处理过程">
+            <transition result="StartService" targetstate="设备自检处理1"/>
+            <transition result="Sign" targetstate="签到交易子流程"/>
+            <transition result="WaitStopOP" targetstate="等待管理员结束通知1"/>
+            <inparamchart>
+                <inparam id="$udf_RollbackFlag"/>
+                <inparam id="$udf_RollbackData"/>
+                <inparam id="$udf_cardtype"/>
+            </inparamchart>
+            <outparamchart>
+                <outparam id="$udf_RollbackFlag"/>
+                <outparam id="$udf_RollbackData"/>
+            </outparamchart>
+        </state>
+        <state id="签到交易子流程" property="logic" subflow="签到子流程">
+            <transition result="Ok" targetstate="加钞状态判断处理1"/>
+            <transition result="DeviceError" targetstate="显示暂停服务页面1"/>
+            <transition result="CheckPINError" targetstate="显示主密钥错误页面1"/>
+            <transition result="Out" targetstate="签到设置超时时间1"/>
+            <inparamchart>
+                <inparam id="$udf_SignJPRLog"/>
+                <inparam id="$udf_SMSignJPRLog"/>
+            </inparamchart>
+            <outparamchart>
+                <outparam id="$udf_SignJPRLog"/>
+                <outparam id="$udf_SMSignJPRLog"/>
+            </outparamchart>
+        </state>
+        <state id="判断是否为全委托模式1" action="CheckIfFullEntrust" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Yes" targetstate="全委托模式App调度1"/>
+            <transition result="No" targetstate="显示账户选择页面1"/>
+        </state>
+        <state id="全委托模式App调度1" action="CallFullEntrustApp" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="EndService" targetstate="退卡"/>
+            <transition result="TimeOut" targetstate="操作超时流水打印1"/>
+            <transition result="DeviceError" targetstate="显示设备故障页面1"/>
+        </state>
+        <state id="交易中状态通知1" action="SendTrsingNotice" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="App调度1"/>
+        </state>
+        <state id="交易中状态通知2" action="SendTrsingNotice" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="客户周期开始打印1"/>
+        </state>
+        <state id="交易中状态通知3" action="SendTrsingNotice" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="客户周期开始打印2"/>
+        </state>
+        <state id="输入密码及校验子流程1" property="logic" subflow="输入密码及校验子流程">
+            <transition result="DeviceError" targetstate="显示设备故障页面1"/>
+            <transition result="OperateTimeOut" targetstate="操作超时流水打印1"/>
+            <transition result="EndService" targetstate="退卡"/>
+            <transition result="ContinueService" targetstate="判断是否为全委托模式1"/>
+            <inparamchart>
+                <inparam id="$udf_TrsAccount"/>
+                <inparam id="$udf_AccountTypeName"/>
+                <inparam id="$udf_AccountType"/>
+                <inparam id="$udf_cardtype"/>
+            </inparamchart>
+            <outparamchart>
+                <outparam id="$udf_pinblock"/>
+                <outparam id="$udf_NeedSignInFlag"/>
+            </outparamchart>
+        </state>
+        <state id="IE初始化2" action="IEInit" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="CreatIeFailed" targetstate="等待插卡或折处理1"/>
+            <transition result="Ok" targetstate="显示系统正在处理页面3"/>
+        </state>
+        <state id="显示系统正在处理页面3" action="ShowSystemDealing" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="等待插卡或折处理1"/>
+        </state>
+        <state id="显示系统正在初始化页面1" action="ShowSysInit" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="服务登录1"/>
+        </state>
+        <state id="IE内存判断1" action="CheckIEMemory" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="等待插卡或折处理1"/>
+            <transition result="ReLoad" targetstate="IE初始化2"/>
+        </state>
+    </state>
+    <state id="管理员登陆子流程" defaultstate="判断是否输入登录密码1" property="sub">
+        <inparamchart>
+        </inparamchart>
+        <outparamchart>
+        </outparamchart>
+        <tempdatachart>
+            <tempdata id="udf_InputInfo" comment="输入数据"/>
+            <tempdata id="udf_Counter" comment="计数器"/>
+        </tempdatachart>
+        <state id="管理员密码输入1" action="GeneralDataInput" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="管理员密码输入判断1"/>
+            <transition result="TimeOut" targetstate="END" assit="EndService"/>
+            <transition result="DeviceError" targetstate="END" assit="EndService"/>
+            <transition result="EndService" targetstate="END" assit="EndService"/>
+        </state>
+        <state id="管理员密码输入判断1" action="AdministratorPasswordJudge" timeout="0" loadpage="" property=""
+               TimeOutState="操作超时">
+            <transition result="InLimit" targetstate="管理员密码输入1"/>
+            <transition result="PasswordRight" targetstate="清除计数器1"/>
+            <transition result="OutLimit" targetstate="END" assit="EndService"/>
+        </state>
+        <state id="清除计数器2" action="ClearTimesFlag" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="管理员密码输入1"/>
+        </state>
+        <state id="判断是否输入登录密码1" action="JudgetInputPIN" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Yes" targetstate="清除计数器2"/>
+            <transition result="No" targetstate="清除计数器1"/>
+        </state>
+        <state id="清除计数器1" action="ClearTimesFlag" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="发送进管理员通知消息1"/>
+        </state>
+        <state id="发送进管理员通知消息1" action="SendStartOPMessage" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="END" assit="Ok"/>
+            <transition result="TimeOut" targetstate="设置计数器1"/>
+            <transition result="PostFailed" targetstate="设置计数器1"/>
+        </state>
+        <state id="设置计数器1" action="SetTimesFlag" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="发送进管理员通知消息1"/>
+            <transition result="Out" targetstate="END" assit="EndService"/>
+        </state>
+    </state>
+    <state id="输入密码前处理子流程" defaultstate="设置默认交易语言1" property="sub">
+        <inparamchart>
+        </inparamchart>
+        <outparamchart>
+            <outparam id="udf_TransLanguage" comment="选择的交易语言"/>
+        </outparamchart>
+        <tempdatachart>
+        </tempdatachart>
+        <state id="设置默认交易语言1" action="SetDefaultLanguage" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="显示欢迎页面1"/>
+        </state>
+        <state id="显示欢迎页面1" action="ShowWelcomePage" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="显示多语言菜单选择1"/>
+        </state>
+        <state id="显示安全提示页面1" action="ShowSaftyPage" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="TimeOut" targetstate="END" assit="OperateTimeOut"/>
+            <transition result="Cancel" targetstate="END" assit="EndService"/>
+            <transition result="Ok" targetstate="END" assit="ContinueService"/>
+            <transition result="DeviceError" targetstate="END" assit="DeviceError"/>
+        </state>
+        <state id="显示多语言菜单选择1" action="SelectLanguage" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="TimeOut" targetstate="END" assit="OperateTimeOut"/>
+            <transition result="Cancel" targetstate="END" assit="EndService"/>
+            <transition result="Ok" targetstate="显示安全提示页面1"/>
+            <transition result="DeviceError" targetstate="END" assit="DeviceError"/>
+        </state>
+    </state>
+    <state id="暂停服务处理子流程" defaultstate="发送状态变化通知消息1" property="sub">
+        <inparamchart>
+        </inparamchart>
+        <outparamchart>
+        </outparamchart>
+        <tempdatachart>
+            <tempdata id="udf_Counter" comment="计数器"/>
+        </tempdatachart>
+        <state id="暂停服务1" action="OutService" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Open" targetstate="END" assit="LogicOpen"/>
+            <transition result="Check" targetstate="END" assit="Check"/>
+            <transition result="STS" targetstate="清除计数器1"/>
+            <transition result="StartOP" targetstate="END" assit="WaitStopOP"/>
+            <transition result="DeviceOk" targetstate="END" assit="DeviceOk"/>
+            <transition result="Out" targetstate="暂停服务1"/>
+        </state>
+        <state id="清除计数器1" action="ClearTimesFlag" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="发送状态通知消息1"/>
+        </state>
+        <state id="发送状态通知消息1" action="SendSTSMessage" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="暂停服务1"/>
+            <transition result="TimeOut" targetstate="设置计数器1"/>
+            <transition result="PostFailed" targetstate="设置计数器1"/>
+        </state>
+        <state id="设置计数器1" action="SetTimesFlag" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="发送状态通知消息1"/>
+            <transition result="Out" targetstate="暂停服务1"/>
+        </state>
+        <state id="发送状态变化通知消息1" action="SendRunChangeMessage" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="清除等待监控关闭标志1"/>
+            <transition result="Wait" targetstate="清除计数器3"/>
+        </state>
+        <state id="清除计数器3" action="ClearTimesFlag" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="发送等待监控关闭消息1"/>
+        </state>
+        <state id="发送等待监控关闭消息1" action="SendLogicClosedMessage" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="清除等待监控关闭标志1"/>
+            <transition result="TimeOut" targetstate="设置计数器3"/>
+            <transition result="PostFailed" targetstate="设置计数器3"/>
+        </state>
+        <state id="设置计数器3" action="SetTimesFlag" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="发送等待监控关闭消息1"/>
+            <transition result="Out" targetstate="清除等待监控关闭标志1"/>
+        </state>
+        <state id="清除等待监控关闭标志1" action="ClearWaitLogicClosedFlag" timeout="0" loadpage="" property=""
+               TimeOutState="操作超时">
+            <transition result="Ok" targetstate="暂停服务1"/>
+        </state>
+    </state>
+    <state id="通知其他状态机启动" defaultstate="清除计数器1" property="sub">
+        <inparamchart>
+        </inparamchart>
+        <outparamchart>
+        </outparamchart>
+        <tempdatachart>
+            <tempdata id="udf_Counter" comment="计数器"/>
+        </tempdatachart>
+        <state id="清除计数器1" action="ClearTimesFlag" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="通知监控状态机启动1"/>
+        </state>
+        <state id="通知监控状态机启动1" action="SendMoniterStart" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="清除计数器2"/>
+            <transition result="Error" targetstate="设置计数器1"/>
+        </state>
+        <state id="设置计数器1" action="SetTimesFlag" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="通知监控状态机启动1"/>
+            <transition result="Out" targetstate="清除计数器2"/>
+        </state>
+        <state id="清除计数器2" action="ClearTimesFlag" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="通知管理员状态机启动1"/>
+        </state>
+        <state id="通知管理员状态机启动1" action="SendManageStart" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="通知VTA状态机启动1"/>
+            <transition result="Error" targetstate="设置计数器2"/>
+        </state>
+        <state id="设置计数器2" action="SetTimesFlag" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="通知管理员状态机启动1"/>
+            <transition result="Out" targetstate="通知VTA状态机启动1"/>
+        </state>
+        <state id="通知VTA状态机启动1" action="SendInitOkToVTAState" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="END" assit="Ok"/>
+            <transition result="Error" targetstate="设置计数器3"/>
+        </state>
+        <state id="设置计数器3" action="SetTimesFlag" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="通知VTA状态机启动1"/>
+            <transition result="Out" targetstate="END" assit="Ok"/>
+        </state>
+    </state>
+    <state id="系统冲正交易处理过程" defaultstate="获得需要冲正的交易名称2" property="sub">
+        <inparamchart>
+            <inparam id="udf_inoutcwccompleteflag" comment="冲正标志"/>
+            <inparam id="udf_inoutcwcdata" comment="冲正数据"/>
+            <inparam id="udf_cardtype" comment="读取的卡种"/>
+        </inparamchart>
+        <outparamchart>
+            <outparam id="udf_inoutcwccompleteflag" comment="冲正标志"/>
+            <outparam id="udf_inoutcwcdata" comment="冲正数据"/>
+        </outparamchart>
+        <tempdatachart>
+            <tempdata id="udf_QCtrsjydmInfo" comment="冲正交易代码"/>
+            <tempdata id="udf_QCJPRFailInfo" comment="冲正失败流水"/>
+            <tempdata id="udf_QCTimesInfo" comment="冲正次数"/>
+            <tempdata id="udf_CWCSendCounter" comment="计数器"/>
+            <tempdata id="udf_localerrorcode" comment="本地错误码"/>
+            <tempdata id="udf_QCJPRRollInfo" comment="冲正流水"/>
+            <tempdata id="udf_xym" comment="主机响应码"/>
+            <tempdata id="udf_jyzh" comment="主机返回账号"/>
+            <tempdata id="udf_xtgzh" comment="主机返回系统跟踪号"/>
+            <tempdata id="udf_QCrsSerNO" comment="冲正原交易系统跟踪号"/>
+            <tempdata id="udf_TrsSendTime" comment="交易发送时间"/>
+            <tempdata id="udf_recvzjlsh" comment="接收主机流水号"/>
+        </tempdatachart>
+        <state id="获得需要冲正的交易名称2" action="GetRollTrsName" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="No" targetstate="清除冲正数据2"/>
+            <transition result="Common" targetstate="冲正数据组包1"/>
+        </state>
+        <state id="冲正交易发送与接收1" action="CWCTransSendAndRecv" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="CreateFailed" targetstate="冲正交易后更新数据库2"/>
+            <transition result="TransLocalError" targetstate="冲正交易后更新数据库2"/>
+            <transition result="TransHostReject" targetstate="冲正交易后更新数据库3"/>
+            <transition result="TransOk" targetstate="冲正交易后更新数据库1"/>
+        </state>
+        <state id="冲正成功流水打印1" action="CWCSuccJpPrint" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="清除冲正数据2"/>
+        </state>
+        <state id="判断主机拒绝是否继续冲正1" action="IfHostErrorContinueCZ" timeout="0" loadpage="" property=""
+               TimeOutState="操作超时">
+            <transition result="Yes" targetstate="判断冲正发送次数是否超限1"/>
+            <transition result="No" targetstate="清除冲正数据1"/>
+        </state>
+        <state id="判断冲正发送次数是否超限1" action="CheckIfCWCSendOver" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="InLimit" targetstate="冲正设置超时时间1"/>
+            <transition result="OutLimit" targetstate="清除冲正数据1"/>
+        </state>
+        <state id="判断冲正发送次数是否超限2" action="CheckIfCWCSendOver" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="InLimit" targetstate="冲正失败流水打印1"/>
+            <transition result="OutLimit" targetstate="清除冲正数据1"/>
+        </state>
+        <state id="冲正失败流水打印1" action="CWCFailedJpPrint" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="冲正设置超时时间1"/>
+        </state>
+        <state id="冲正设置超时时间1" action="CWCSetTimeOut" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="TimeOut" targetstate="冲正数据组包1"/>
+            <transition result="LogicClose" targetstate="冲正数据组包1"/>
+            <transition result="StartOP" targetstate="END" assit="WaitStopOP"/>
+        </state>
+        <state id="冲正数据组包1" action="ComposeRollData" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="记录冲正交易到数据库1"/>
+        </state>
+        <state id="清除冲正数据1" action="ClearRollData" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="END" assit="Sign"/>
+        </state>
+        <state id="清除冲正数据2" action="ClearRollData" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="END" assit="StartService"/>
+        </state>
+        <state id="记录冲正交易到数据库1" action="RecordRollTrsToLOG" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="冲正交易发送与接收1"/>
+        </state>
+        <state id="冲正交易后更新数据库1" action="RollTrsUpdateLOG" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="冲正成功更新原交易数据库1"/>
+        </state>
+        <state id="冲正交易后更新数据库2" action="RollTrsUpdateLOG" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="判断冲正发送次数是否超限2"/>
+        </state>
+        <state id="冲正交易后更新数据库3" action="RollTrsUpdateLOG" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="判断主机拒绝是否继续冲正1"/>
+        </state>
+        <state id="冲正成功更新原交易数据库1" action="RollSuccessUpdateRSLOG" timeout="0" loadpage="" property=""
+               TimeOutState="操作超时">
+            <transition result="Ok" targetstate="冲正成功流水打印1"/>
+        </state>
+    </state>
+    <state id="签到子流程" defaultstate="签到交易发送前数据处理2" property="sub">
+        <inparamchart>
+            <inparam id="udf_inoutSignJPRLog" comment="签到流水打印标志"/>
+            <inparam id="udf_inoutSMSignJPRLog" comment="国密签到流水打印标志"/>
+        </inparamchart>
+        <outparamchart>
+            <outparam id="udf_inoutSignJPRLog" comment="签到流水打印标志"/>
+            <outparam id="udf_inoutSMSignJPRLog" comment="国密签到流水打印标志"/>
+        </outparamchart>
+        <tempdatachart>
+            <tempdata id="udf_recvxym" comment="接收响应码"/>
+            <tempdata id="udf_recvmacyzm" comment="接收Mac校验码"/>
+            <tempdata id="udf_recvjmpinkey" comment="接收PinKey"/>
+            <tempdata id="udf_recvpinyzm" comment="接收Pin校验码"/>
+            <tempdata id="udf_recvjmmackey" comment="接收MacKey"/>
+        </tempdatachart>
+        <state id="签到交易发送与接收1" action="SignTransSendAndRecv" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="TransLocalError" targetstate="签到本地拒绝信息显示1"/>
+            <transition result="TransHostReject" targetstate="签到本地拒绝信息显示1"/>
+            <transition result="TransOk" targetstate="工作与Mac密钥加载处理1"/>
+            <transition result="CreateFailed" targetstate="签到本地拒绝流水打印1"/>
+        </state>
+        <state id="签到交易发送前数据处理2" action="DataProcessingBeforeSign" timeout="0" loadpage="" property=""
+               TimeOutState="操作超时">
+            <transition result="Ok" targetstate="签到交易发送与接收1"/>
+        </state>
+        <state id="签到本地拒绝信息显示1" action="SignLocalErrShowInfo" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="关闭指示灯1"/>
+        </state>
+        <state id="签到成功流水打印1" action="SignSuccJpPrint" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="判断是否支持国密算法1"/>
+        </state>
+        <state id="签到本地拒绝流水打印1" action="SignLocalErrJpPrint" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="签到本地拒绝信息显示1"/>
+        </state>
+        <state id="关闭指示灯1" action="CloseLight" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="END" assit="Out"/>
+        </state>
+        <state id="工作与Mac密钥加载处理1" action="PINAndMAcKeyProcess" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="签到成功流水打印1"/>
+            <transition result="CheckPINError" targetstate="END" assit="CheckPINError"/>
+            <transition result="DeviceError" targetstate="END" assit="DeviceError"/>
+            <transition result="NeedLoadMasterKey" targetstate="签到本地拒绝信息显示1"/>
+            <transition result="NeedNot" targetstate="END" assit="Ok"/>
+        </state>
+        <state id="判断是否支持国密算法1" action="IfSupportPINPadSMAlg" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Yes" targetstate="国密签到交易发送前数据处理1"/>
+            <transition result="No" targetstate="END" assit="Ok"/>
+        </state>
+        <state id="国密签到交易发送前数据处理1" action="DataProcessingBeforeSMSign" timeout="0" loadpage="" property=""
+               TimeOutState="操作超时">
+            <transition result="Ok" targetstate="国密签到交易发送与接收1"/>
+        </state>
+        <state id="国密签到交易发送与接收1" action="SMSignTransSendAndRecv" timeout="0" loadpage="" property=""
+               TimeOutState="操作超时">
+            <transition result="TransLocalError" targetstate="签到本地拒绝信息显示1"/>
+            <transition result="TransHostReject" targetstate="签到本地拒绝信息显示1"/>
+            <transition result="TransOk" targetstate="国密工作与Mac密钥加载处理1"/>
+            <transition result="CreateFailed" targetstate="国密签到本地拒绝流水打印1"/>
+        </state>
+        <state id="国密工作与Mac密钥加载处理1" action="SMPINAndMAcKeyProcess" timeout="0" loadpage="" property=""
+               TimeOutState="操作超时">
+            <transition result="Ok" targetstate="国密签到成功流水打印1"/>
+            <transition result="CheckPINError" targetstate="END" assit="CheckPINError"/>
+            <transition result="DeviceError" targetstate="END" assit="DeviceError"/>
+            <transition result="NeedLoadMasterKey" targetstate="签到本地拒绝信息显示1"/>
+            <transition result="NeedNot" targetstate="END" assit="Ok"/>
+        </state>
+        <state id="国密签到成功流水打印1" action="SMSignSuccJpPrint" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="END" assit="Ok"/>
+        </state>
+        <state id="国密签到本地拒绝流水打印1" action="SMSignLocalErrJpPrint" timeout="0" loadpage="" property=""
+               TimeOutState="操作超时">
+            <transition result="Ok" targetstate="签到本地拒绝信息显示1"/>
+        </state>
+    </state>
+    <state id="输入密码及校验子流程" defaultstate="清除计数器1" property="sub">
+        <inparamchart>
+            <inparam id="udf_TrsAccount" comment="交易账号"/>
+            <inparam id="udf_AccountTypeName" comment="卡类型名"/>
+            <inparam id="udf_AccountType" comment="卡类型"/>
+            <inparam id="udf_cardtype" comment="卡介质类型"/>
+        </inparamchart>
+        <outparamchart>
+            <outparam id="udf_pinblock" comment="交易密码"/>
+            <outparam id="udf_outifresign" comment="需要重新签到标志"/>
+        </outparamchart>
+        <tempdatachart>
+            <tempdata id="udf_Counter" comment="计数器"/>
+            <tempdata id="udf_recvxym" comment="接受响应码"/>
+            <tempdata id="udf_localerrorcode" comment="本地错误码"/>
+            <tempdata id="udf_printrpflag" comment="主机吞卡打印凭条标志"/>
+            <tempdata id="udf_icscripttag" comment="执行脚本通知后各标签数据"/>
+            <tempdata id="udf_havescriptflag" comment="是否存在脚本标志"/>
+            <tempdata id="udf_TCdata" comment="TC值"/>
+            <tempdata id="udf_RollbackData" comment="保存的写卡通知原始数据"/>
+        </tempdatachart>
+        <state id="判断是否需要做密码验证交易1" action="CheckIfNeedPwdTrans" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Yes" targetstate="密码验证交易初始化1"/>
+            <transition result="No" targetstate="END" assit="ContinueService"/>
+        </state>
+        <state id="密码验证交易初始化1" action="PinCheckTransInit" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="密码验证交易2"/>
+        </state>
+        <state id="密码验证交易2" action="CheckPINTrans" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="CreateFailed" targetstate="验密本地拒绝信息显示1"/>
+            <transition result="TransLocalError" targetstate="验密本地拒绝信息显示1"/>
+            <transition result="TransHostReject" targetstate="验密主机拒绝信息显示1"/>
+            <transition result="TransOk" targetstate="主框架写卡通知流程1"/>
+            <transition result="PackErr" targetstate="显示解包错误信息1"/>
+            <transition result="UnpackErr" targetstate="显示解包错误信息2"/>
+        </state>
+        <state id="验密本地拒绝信息显示1" action="CheckPinLocalErrPage" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="判断是否选择继续输入密码2"/>
+        </state>
+        <state id="验密主机拒绝信息显示1" action="CheckPinHostErrPage" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="InputPIN" targetstate="判断是否选择继续输入密码1"/>
+            <transition result="ContinueService" targetstate="判断是否选择继续输入密码1"/>
+            <transition result="CaptureCard" targetstate="密码验证主机吞卡处理1"/>
+            <transition result="EndService" targetstate="主框架写卡通知流程2"/>
+        </state>
+        <state id="判断是否选择继续输入密码1" action="IfPinFailedInput" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Yes" targetstate="密码验证失败提示选择页面1"/>
+            <transition result="No" targetstate="主框架写卡通知流程2"/>
+        </state>
+        <state id="密码验证失败提示选择页面1" action="PinCheckErrSelect" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="EndService" targetstate="主框架写卡通知流程2"/>
+            <transition result="Enter" targetstate="插卡后密码输入1"/>
+            <transition result="DeviceError" targetstate="主框架写卡通知流程3"/>
+        </state>
+        <state id="密码验证主机吞卡处理1" action="CheckPinHostCpt" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="主框架写卡通知流程2"/>
+        </state>
+        <state id="清除计数器1" action="ClearTimesFlag" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="插卡后密码输入1"/>
+        </state>
+        <state id="密码输入次数检查1" action="CheckPINInputTimes" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="插卡后密码输入1"/>
+            <transition result="Out" targetstate="END" assit="EndService"/>
+        </state>
+        <state id="显示解包错误信息1" action="ShowUnpackErrInfo" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="END" assit="EndService"/>
+        </state>
+        <state id="插卡后密码输入1" action="GeneralPinBlockInput" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="判断是否需要做密码验证交易1"/>
+            <transition result="DeviceError" targetstate="END" assit="DeviceError"/>
+            <transition result="Cancel" targetstate="END" assit="EndService"/>
+            <transition result="TimeOut" targetstate="END" assit="OperateTimeOut"/>
+            <transition result="Null" targetstate="密码输入次数检查1"/>
+            <transition result="Clear" targetstate="插卡后密码输入1"/>
+        </state>
+        <state id="判断是否选择继续输入密码2" action="IfPinFailedInput" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Yes" targetstate="密码验证失败提示选择页面1"/>
+            <transition result="No" targetstate="END" assit="EndService"/>
+        </state>
+        <state id="主框架写卡通知流程1" property="logic" subflow="主框架写卡通知流程">
+            <transition result="Ok" targetstate="END" assit="ContinueService"/>
+            <inparamchart>
+                <inparam id="$udf_havescriptflag"/>
+                <inparam id=""/>
+                <inparam id="$udf_TCdata"/>
+                <inparam id="$udf_icscripttag"/>
+                <inparam id="$udf_RollbackData"/>
+            </inparamchart>
+            <outparamchart>
+            </outparamchart>
+        </state>
+        <state id="主框架写卡通知流程2" property="logic" subflow="主框架写卡通知流程">
+            <transition result="Ok" targetstate="END" assit="EndService"/>
+            <inparamchart>
+                <inparam id="$udf_havescriptflag"/>
+                <inparam id=""/>
+                <inparam id="$udf_TCdata"/>
+                <inparam id="$udf_icscripttag"/>
+                <inparam id="$udf_RollbackData"/>
+            </inparamchart>
+            <outparamchart>
+            </outparamchart>
+        </state>
+        <state id="主框架写卡通知流程3" property="logic" subflow="主框架写卡通知流程">
+            <transition result="Ok" targetstate="END" assit="DeviceError"/>
+            <inparamchart>
+                <inparam id="$udf_havescriptflag"/>
+                <inparam id=""/>
+                <inparam id="$udf_TCdata"/>
+                <inparam id="$udf_icscripttag"/>
+                <inparam id="$udf_RollbackData"/>
+            </inparamchart>
+            <outparamchart>
+            </outparamchart>
+        </state>
+        <state id="显示解包错误信息2" action="ShowUnpackErrInfo" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="主框架写卡通知流程2"/>
+        </state>
+    </state>
+    <state id="主框架写卡通知流程" defaultstate="主框架判断写卡通知发送1" property="sub">
+        <inparamchart>
+            <inparam id="udf_haveScript" comment="存在脚本标志"/>
+            <inparam id="udf_amount" comment="交易金额"/>
+            <inparam id="udf_TCdata" comment="TC数据"/>
+            <inparam id="udf_Scriptdata" comment="脚本标签数据"/>
+            <inparam id="udf_RollbackData" comment="冲正数据"/>
+        </inparamchart>
+        <outparamchart>
+        </outparamchart>
+        <tempdatachart>
+            <tempdata id="udf_localerrorcode" comment="本地错误码"/>
+            <tempdata id="udf_recvxym" comment="接收响应码"/>
+            <tempdata id="udf_recvjyzh" comment="接收交易账号"/>
+            <tempdata id="udf_recvxtgzh" comment="接收系统跟踪号"/>
+            <tempdata id="udf_Counter" comment="计数器"/>
+            <tempdata id="udf_Limit" comment="限制次数"/>
+        </tempdatachart>
+        <state id="主框架判断写卡通知发送1" action="EAIJudgeSendScriptNotice" timeout="0" loadpage="" property=""
+               TimeOutState="操作超时">
+            <transition result="Yes" targetstate="清除计数器1"/>
+            <transition result="No" targetstate="END" assit="Ok"/>
+        </state>
+        <state id="清除计数器1" action="ClearTimesFlag" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="主框架写卡通知交易初始化1"/>
+        </state>
+        <state id="主框架写卡通知交易初始化1" action="EAIScriptNoticeInit" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="主框架写卡通知交易1"/>
+        </state>
+        <state id="主框架写卡通知交易1" action="EAIScriptNoticeTrs" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="主框架写卡通知数据库更新1"/>
+            <transition result="Error" targetstate="主框架写卡通知数据库更新2"/>
+        </state>
+        <state id="主框架写卡通知数据库更新1" action="EAIUpdateWriteScriptDataBase" timeout="0" loadpage="" property=""
+               TimeOutState="操作超时">
+            <transition result="Ok" targetstate="主框架组织终端验证结果打印1"/>
+        </state>
+        <state id="主框架写卡通知数据库更新2" action="EAIUpdateWriteScriptDataBase" timeout="0" loadpage="" property=""
+               TimeOutState="操作超时">
+            <transition result="Ok" targetstate="主框架写卡通知设置计数器1"/>
+        </state>
+        <state id="主框架组织终端验证结果打印1" action="EAIComTVRResultJPR" timeout="0" loadpage="" property="" TimeOutState="操作超时">
+            <transition result="Ok" targetstate="END" assit="Ok"/>
+        </state>
+        <state id="主框架写卡通知设置计数器1" action="EAISendNoticeSetTimes" timeout="0" loadpage="" property=""
+               TimeOutState="操作超时">
+            <transition result="Ok" targetstate="主框架写卡通知交易初始化1"/>
+            <transition result="Out" targetstate="主框架组织终端验证结果打印1"/>
+        </state>
+    </state>
+</statechart>

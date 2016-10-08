@@ -1,0 +1,146 @@
+<?xml version="1.0"?>
+<statechart defaultstate="入口流程M">
+
+    <tempdatachart>
+        <tempdata id="Account" comment="交易账号"/>
+        <tempdata id="Amount" comment="交易金额"/>
+        <tempdata id="TransType" comment="交易类型"/>
+        <tempdata id="TransInfo" comment="交易信息"/>
+    </tempdatachart>
+
+    <state id="入口流程M" defaultstate="初始化设备">
+        <state id="初始化设备" subflow="设备初始化M">
+            <transition result="ok" targetstate="等待插卡"/>
+        </state>
+        <state id="等待插卡" action="svWaitCardAndRead">
+            <inparamchart>
+                <inparam id="$Account"/>
+            </inparamchart>
+            <transition result="error" targetstate="showErrorPage"/>
+            <transition result="ok" targetstate="密码键盘"/>
+        </state>
+        <state id="密码键盘" action="svPoolPinPad">
+            <transition result="error" targetstate="showErrorPage"/>
+            <transition result="ok" targetstate="业务菜单选择"/>
+        </state>
+        <state id="业务菜单选择" action="svBuzMenu">
+            <inparamchart>
+                <inparam id="$TransType"/>
+            </inparamchart>
+            <transition result="error" targetstate="showErrorPage"/>
+            <transition result="draw" targetstate="取款流程"/>
+            <transition result="query" targetstate="查询流程"/>
+            <transition result="trans" targetstate="转账流程"/>
+            <transition result="exit" targetstate="退卡"/>
+        </state>
+        <state id="取款流程" subflow="取款流程M">
+            <transition result="ok" targetstate="业务菜单选择"/>
+        </state>
+        <state id="查询流程" subflow="查询流程M">
+            <transition result="ok" targetstate="业务菜单选择"/>
+        </state>
+        <state id="转账流程" subflow="转账流程M">
+            <transition result="ok" targetstate="业务菜单选择"/>
+        </state>
+        <state id="退卡" action="svEjectAndCapCard">
+            <inparamchart>
+                <inparam id="$Account"/>
+            </inparamchart>
+            <transition result="error" targetstate="showErrorPage"/>
+            <transition result="ok" targetstate="注销服务"/>
+        </state>
+        <state id="注销服务" subflow="注销服务M">
+            <transition result="error" targetstate="showErrorPage"/>
+            <transition result="ok" targetstate="END"/>
+        </state>
+    </state>
+
+    <state id="设备初始化M" defaultstate="初始化设备1">
+        <state id="初始化设备1" action="svInitDev1">
+            <transition result="error" targetstate="showErrorPage1"/>
+            <transition result="ok" targetstate="初始化设备2"/>
+        </state>
+        <state id="初始化设备2" action="svInitDev2">
+            <transition result="error" targetstate="showErrorPage2"/>
+            <transition result="ok" targetstate="END"/>
+        </state>
+    </state>
+
+    <state id="注销服务M" defaultstate="注销设备1">
+        <state id="注销设备1" action="svEndDev1">
+            <transition result="error" targetstate="showErrorPage1"/>
+            <transition result="ok" targetstate="注销设备2"/>
+        </state>
+        <state id="注销设备2" action="svEndDev1">
+            <transition result="error" targetstate="showErrorPage2"/>
+            <transition result="ok" targetstate="END"/>
+        </state>
+    </state>
+
+    <state id="取款流程M" defaultstate="取款初始化">
+        <state id="取款初始化" action="svWithdralInit">
+            <transition result="error" targetstate="showErrorPage"/>
+            <transition result="ok" targetstate="取款金额校验"/>
+        </state>
+        <state id="取款金额校验" action="svWithdralAmtCheck">
+            <inparamchart>
+                <inparam id="$Account"/>
+                <inparam id="$Amount"/>
+            </inparamchart>
+            <transition result="error" targetstate="showErrorPage"/>
+            <transition result="ok" targetstate="准备现金"/>
+        </state>
+        <state id="准备现金" action="svMixDispense">
+            <inparamchart>
+                <inparam id="$Amount"/>
+            </inparamchart>
+            <transition result="error" targetstate="showErrorPage"/>
+            <transition result="ok" targetstate="END"/>
+        </state>
+    </state>
+
+    <state id="查询流程M" defaultstate="取款初始化">
+        <state id="取款初始化" action="svWithdralInit">
+            <transition result="error" targetstate="showErrorPage"/>
+            <transition result="ok" targetstate="取款金额校验"/>
+        </state>
+        <state id="取款金额校验" action="svWithdralAmtCheck">
+            <inparamchart>
+                <inparam id="$Account"/>
+                <inparam id="$Amount"/>
+            </inparamchart>
+            <transition result="error" targetstate="showErrorPage"/>
+            <transition result="ok" targetstate="准备现金"/>
+        </state>
+        <state id="准备现金" action="svMixDispense">
+            <inparamchart>
+                <inparam id="$Amount"/>
+            </inparamchart>
+            <transition result="error" targetstate="showErrorPage"/>
+            <transition result="ok" targetstate="END"/>
+        </state>
+    </state>
+
+    <state id="转账流程M" defaultstate="取款初始化">
+        <state id="取款初始化" action="svWithdralInit">
+            <transition result="error" targetstate="showErrorPage"/>
+            <transition result="ok" targetstate="取款金额校验"/>
+        </state>
+        <state id="取款金额校验" action="svWithdralAmtCheck">
+            <inparamchart>
+                <inparam id="$Account"/>
+                <inparam id="$Amount"/>
+            </inparamchart>
+            <transition result="error" targetstate="showErrorPage"/>
+            <transition result="ok" targetstate="准备现金"/>
+        </state>
+        <state id="准备现金" action="svMixDispense">
+            <inparamchart>
+                <inparam id="$Amount"/>
+            </inparamchart>
+            <transition result="error" targetstate="showErrorPage"/>
+            <transition result="ok" targetstate="END"/>
+        </state>
+    </state>
+
+</statechart>
