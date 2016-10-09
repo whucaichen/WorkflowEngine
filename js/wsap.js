@@ -12,7 +12,7 @@ function callJava() {
 }
 
 function sendTcp(msg) {
-    com.chance.SocketHelper.sendTcp(msg);
+    return com.chance.SocketHelper.sendTcp(msg);
 }
 
 function svInitAll() {
@@ -46,11 +46,17 @@ function svWaitCardAndRead(account) {
 }
 
 //var choice;
-function svBuzMenu(choice) {
-    print("$ svBuzMenu-" + choice);
-    svDoSomething();
+function svBuzMenu() {
+    print("$ svBuzMenu");
+    var choice = sendTcp("Menu Select");
+    print("$ item selected：" + choice);
     return choice;
 }
+//function svBuzMenu(choice) {
+//    print("$ svBuzMenu-" + choice);
+//    svDoSomething();
+//    return choice;
+//}
 
 function svEjectAndCapCard(account) {
     print("$ svEjectAndCapCard-" + account);

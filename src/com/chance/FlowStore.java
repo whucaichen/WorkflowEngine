@@ -94,6 +94,8 @@ public class FlowStore {
             } else if (fb.get_Action() != null) {
                 flowHistory.add("do-" + fb.get_ID());
                 loadInstant_In(fb);//装载变量引用
+                fb.set_Result(null);
+
                 //同步方法
 //                String result = (String) fb.runAction();
 //                fb.set_Result(result);
@@ -253,7 +255,7 @@ public class FlowStore {
 //            if(b){
 //                vars.put("TransType", "draw");
 //            }else {
-            vars.put("TransType", "exit");
+//            vars.put("TransType", "exit");
 //            }
         }
         if (vars.containsKey("TransInfo")) {

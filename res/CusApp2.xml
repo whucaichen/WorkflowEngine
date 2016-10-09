@@ -24,9 +24,9 @@
             <transition result="ok" targetstate="业务菜单选择"/>
         </state>
         <state id="业务菜单选择" action="svBuzMenu">
-            <inparamchart>
-                <inparam id="$TransType"/>
-            </inparamchart>
+            <!--<inparamchart>-->
+                <!--<inparam id="$TransType"/>-->
+            <!--</inparamchart>-->
             <transition result="error" targetstate="showErrorPage"/>
             <transition result="draw" targetstate="取款流程"/>
             <transition result="query" targetstate="查询流程"/>

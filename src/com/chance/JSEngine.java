@@ -86,17 +86,18 @@ public class JSEngine {
         return "hello";
     }
 
+    //测试wsap.js对com.chance.JSEngine.hello()的调用
     public String jsCallJava() {
         this.invoke("callJava");
         List list2 = (List) engine.get("list2");
         return list2.toString();
     }
 
+    //测试wsap.js利用com.chance.SocketHelper.sendTcp(msg)来发送Socket报文
     public void sendTcp(String msg) {
         this.invoke("sendTcp", msg);
     }
 
-    //Test
     public static void main(String[] args) throws Exception {
         JSEngine je = new JSEngine();
 //        System.out.println(je.jsCallJava());
