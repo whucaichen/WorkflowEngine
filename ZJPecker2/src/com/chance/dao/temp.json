@@ -1,0 +1,12 @@
+{
+  "head": {
+    "cmdcode": "010001",
+    "requestid": "1000010101010101010",
+    "trantime": "2016-08-30 14:36:20"
+  },
+  "body": {
+    "type": "1",
+    "action": "click",
+    "buttonname": "查询"
+  }
+}

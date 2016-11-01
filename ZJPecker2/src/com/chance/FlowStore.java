@@ -1,5 +1,6 @@
 package com.chance;
 
+import com.chance.util.Attr;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
@@ -136,7 +137,7 @@ public class FlowStore {
     public void loadFlowFile(String flowFile) {
         try {
             SAXReader reader = new SAXReader();
-            Document document = reader.read(new File(Config.URL_RES + flowFile));
+            Document document = reader.read(new File(Attr.URL_RES + flowFile));
             Element root = document.getRootElement();
             System.out.println("<WorkFlow>：" + flowFile +
                     " - defaultstate：" + root.attribute("defaultstate").getValue());

@@ -3,6 +3,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/WorkflowEngine.iml" filepath="$PROJECT_DIR$/WorkflowEngine.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ZJPecker/ZJPecker.iml" filepath="$PROJECT_DIR$/ZJPecker/ZJPecker.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ZJPecker2/ZJPecker2.iml" filepath="$PROJECT_DIR$/ZJPecker2/ZJPecker2.iml" />
     </modules>
   </component>
 </project>

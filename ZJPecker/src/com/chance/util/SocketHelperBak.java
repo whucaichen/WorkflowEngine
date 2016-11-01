@@ -1,5 +1,7 @@
-package com.chance;
+package com.chance.util;
 
+import com.chance.dao.Datagram;
+import com.chance.dao.BHOMsg;
 import com.google.gson.Gson;
 
 import java.io.IOException;
@@ -10,13 +12,13 @@ import java.text.DecimalFormat;
 /**
  * Created by Chance on 16/10/08.
  */
-public class SocketHelper implements Runnable{
+public class SocketHelperBak implements Runnable{
 
     public static String IP = "10.34.10.122";
     public static int PORT = 50026;
     public static Socket mSocket;
 
-    public SocketHelper() {
+    public SocketHelperBak() {
         try {
             mSocket = new Socket(IP, PORT);
         } catch (IOException e) {
@@ -56,14 +58,13 @@ public class SocketHelper implements Runnable{
         return false;
     }
 
-    public void sendMsg(String loginID, String processid, String destinationId, Data data) {
-        //真实的客户端
-        Msg msg = new Msg();
-        msg.setLoginid(loginID);
-        msg.setProcessid(processid);
-        msg.setDestinationid(destinationId);
-        msg.setData(data);
-        String jsonMsg = new Gson().toJson(msg);
+    public void sendMsg(String loginID, String processid, String destinationId, Datagram datagram) {
+        BHOMsg BHOMsg = new BHOMsg();
+        BHOMsg.setLoginid(loginID);
+        BHOMsg.setProcessid(processid);
+        BHOMsg.setDestinationid(destinationId);
+        BHOMsg.setDatagram(datagram);
+        String jsonMsg = new Gson().toJson(BHOMsg);
         sendZJTcp(jsonMsg);
     }
 
@@ -93,18 +94,18 @@ public class SocketHelper implements Runnable{
     }
 
     public static void Test() {
-        SocketHelper sh = new SocketHelper();
+        SocketHelperBak sh = new SocketHelperBak();
         sh.sendMsg("zjpecker", "login", null, null);
 
-        Data data = new Data();
-        data.getHead().setCmdcode("010001");
-        data.getHead().setRequestid("1000010101010101010");
-        data.getHead().setTrantime("2016-08-30 14:36:20");
-        data.getBody().setType("1");
-        data.getBody().setAction("click");
-        data.getBody().setButtonname("test");
+        Datagram datagram = new Datagram();
+        datagram.getHead().setCmdcode("010001");
+        datagram.getHead().setRequestid("1000010101010101010");
+        datagram.getHead().setTrantime("2016-08-30 14:36:20");
+        datagram.getBody().setType("1");
+        datagram.getBody().setAction("click");
+        datagram.getBody().setButtonname("test");
 
-        sh.sendMsg("zjpecker", "senddata", "bho", data);
+        sh.sendMsg("zjpecker", "senddata", "bho", datagram);
 
 //        sh.closeSocket();
 
@@ -118,7 +119,7 @@ public class SocketHelper implements Runnable{
     }
 
     public static void main(String[] args) {
-        SocketHelper sh = new SocketHelper();
-        sh.run();
+        SocketHelperBak sh = new SocketHelperBak();
+        new Thread(sh).start();
     }
 }
